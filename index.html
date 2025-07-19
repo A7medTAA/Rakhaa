@@ -33,6 +33,7 @@
       padding: 15px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(255,255,255,0.05);
+      cursor: pointer;
     }
 
     .video-frame {
@@ -52,22 +53,6 @@
       display: block;
     }
 
-    .fullscreen-btn {
-      margin: 10px auto 0;
-      display: block;
-      padding: 8px 16px;
-      background-color: #444;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .fullscreen-btn:hover {
-      background-color: #666;
-    }
-
     .video-title {
       margin-top: 10px;
       font-size: 18px;
@@ -85,16 +70,39 @@
       color: #bbbbbb;
     }
 
-    /* حجم مخصص للجوال */
-    @media (max-width: 600px) {
-      .video-frame {
-        height: 220px;
-      }
+    /* نافذة التكبير */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 5%;
+      left: 5%;
+      width: 90%;
+      height: 90%;
+      background-color: rgba(0, 0, 0, 0.95);
+      z-index: 9999;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
 
-      .fullscreen-btn {
-        font-size: 14px;
-        padding: 6px 12px;
-      }
+    .overlay iframe {
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      width: 35px;
+      height: 35px;
+      cursor: pointer;
+      box-shadow: 0 0 5px #000;
     }
   </style>
 </head>
@@ -106,24 +114,22 @@
 
   <div class="container">
     <!-- فيديو 1 -->
-    <div class="video-box">
-      <div class="video-frame" id="frame1">
+    <div class="video-box" onclick="expandVideo('https://player.vimeo.com/video/1102727325?title=0&byline=0&portrait=0')">
+      <div class="video-frame">
         <iframe src="https://player.vimeo.com/video/1102727325?title=0&byline=0&portrait=0"
           allow="autoplay; fullscreen; picture-in-picture"
           allowfullscreen></iframe>
       </div>
-      <button class="fullscreen-btn" onclick="goFullScreen('frame1')">تكبير الفيديو</button>
       <div class="video-title">الكرسي الأساسي</div>
     </div>
 
     <!-- فيديو 2 -->
-    <div class="video-box">
-      <div class="video-frame" id="frame2">
+    <div class="video-box" onclick="expandVideo('https://player.vimeo.com/video/1102727352?title=0&byline=0&portrait=0')">
+      <div class="video-frame">
         <iframe src="https://player.vimeo.com/video/1102727352?title=0&byline=0&portrait=0"
           allow="autoplay; fullscreen; picture-in-picture"
           allowfullscreen></iframe>
       </div>
-      <button class="fullscreen-btn" onclick="goFullScreen('frame2')">تكبير الفيديو</button>
       <div class="video-title">الكرسي الفاخر</div>
     </div>
   </div>
@@ -135,29 +141,26 @@
     بريد إلكتروني: info@yourcompany.com
   </footer>
 
+  <!-- نافذة التكبير -->
+  <div class="overlay" id="videoOverlay">
+    <button class="close-btn" onclick="closeOverlay()">✕</button>
+    <iframe id="overlayVideo" src="" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
   <script>
-    function goFullScreen(id) {
-      const frame = document.getElementById(id);
-      if (frame.requestFullscreen) {
-        frame.requestFullscreen();
-      } else if (frame.webkitRequestFullscreen) {
-        frame.webkitRequestFullscreen();
-      } else if (frame.mozRequestFullScreen) {
-        frame.mozRequestFullScreen();
-      } else if (frame.msRequestFullscreen) {
-        frame.msRequestFullscreen();
-      } else {
-        alert("متصفحك لا يدعم ملء الشاشة تلقائيًا.");
-      }
+    function expandVideo(videoURL) {
+      const overlay = document.getElementById("videoOverlay");
+      const iframe = document.getElementById("overlayVideo");
+      iframe.src = videoURL + "&autoplay=1";
+      overlay.style.display = "block";
     }
 
-    // تنبيه لمستخدمي آيفون
-    document.addEventListener("DOMContentLoaded", function () {
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      if (isIOS) {
-        console.log("متصفح iOS لا يسمح بملء الشاشة التلقائي.");
-      }
-    });
+    function closeOverlay() {
+      const overlay = document.getElementById("videoOverlay");
+      const iframe = document.getElementById("overlayVideo");
+      iframe.src = "";
+      overlay.style.display = "none";
+    }
   </script>
 
 </body>
