@@ -52,6 +52,22 @@
       display: block;
     }
 
+    .fullscreen-btn {
+      margin: 10px auto 0;
+      display: block;
+      padding: 8px 16px;
+      background-color: #444;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .fullscreen-btn:hover {
+      background-color: #666;
+    }
+
     .video-title {
       margin-top: 10px;
       font-size: 18px;
@@ -79,21 +95,23 @@
   <div class="container">
     <!-- فيديو 1 -->
     <div class="video-box">
-      <div class="video-frame">
+      <div class="video-frame" id="frame1">
         <iframe src="https://player.vimeo.com/video/1102727325?title=0&byline=0&portrait=0"
           allow="autoplay; fullscreen; picture-in-picture"
           allowfullscreen></iframe>
       </div>
+      <button class="fullscreen-btn" onclick="goFullScreen('frame1')">تكبير الفيديو</button>
       <div class="video-title">الكرسي الأساسي</div>
     </div>
 
     <!-- فيديو 2 -->
     <div class="video-box">
-      <div class="video-frame">
+      <div class="video-frame" id="frame2">
         <iframe src="https://player.vimeo.com/video/1102727352?title=0&byline=0&portrait=0"
           allow="autoplay; fullscreen; picture-in-picture"
           allowfullscreen></iframe>
       </div>
+      <button class="fullscreen-btn" onclick="goFullScreen('frame2')">تكبير الفيديو</button>
       <div class="video-title">الكرسي الفاخر</div>
     </div>
   </div>
@@ -104,6 +122,23 @@
     إنستغرام: @yourcompany<br>
     بريد إلكتروني: info@yourcompany.com
   </footer>
+
+  <script>
+    function goFullScreen(id) {
+      const frame = document.getElementById(id);
+      if (frame.requestFullscreen) {
+        frame.requestFullscreen();
+      } else if (frame.webkitRequestFullscreen) {
+        frame.webkitRequestFullscreen();
+      } else if (frame.mozRequestFullScreen) {
+        frame.mozRequestFullScreen();
+      } else if (frame.msRequestFullscreen) {
+        frame.msRequestFullscreen();
+      } else {
+        alert("متصفحك لا يدعم ملء الشاشة تلقائيًا.");
+      }
+    }
+  </script>
 
 </body>
 </html>
